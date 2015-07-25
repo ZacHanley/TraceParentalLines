@@ -23,6 +23,12 @@ alldads <- alldads[-c(1),]
 rm(i,st2PedId,ped,dadline,newdadline)
 rm(newdadlines,dadcol,n,st2Name)
 
-#output
+#output into Windows due to paranoia
 write.csv(alldads, file="alldads.csv")
-rm(alldads)
+
+#remove NoDad entries
+malldads <- subset(alldads, maleAncestor!="NoDad")
+
+#load list of dads to check against
+
+#mine all male ancestors against the dad checklist
