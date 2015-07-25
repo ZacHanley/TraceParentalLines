@@ -1,19 +1,24 @@
 #load list of stage 2 codes and their PedigreeItems. This file was created by hand-editing the Stage2 xls and using Word to eliminate all sorts of crap such as cut-and-paste space artifacts
 St2codes_to_GroupCodes20150724 <- read.csv("~/R/St2codes_to_GroupCodes20150724.csv")
+
+#variables: alldads is the matrix to be populated, n is a debug variable to allow loop to start at !=1
+alldads <- matrix(ncol=2)
+colnames(alldads) <- c("maleAncestor","st2Name")
+n <- c(1)
+
 #main loop that crawls the file for PedigreeItems and uses EBridaPedigree to create a matrix of each item versus each PedigreeItem in its male line
-alldads <- matrix(ncol=2) #sets up the empty matrix
-n <- c(1) #for debug allows restarting loop at a number other than 1
-for (i in 1:nrow(St2codes_to_GroupCodes20150724)) {
+for (i in n:nrow(St2codes_to_GroupCodes20150724)) {
+  st2Name <- as.character(St2codes_to_GroupCodes20150724[i,1])
   st2PedId <- as.character(St2codes_to_GroupCodes20150724[i,2])
-  print(i) #progressforerrorchecking
-  ped <- EBridaPedigree(crpId=5,PI=st2PedId)
-  ped[is.na(ped)] <- c("none") #prevents a completely empty pedigree killing then loop
-  # dadline <- ped$male[!is.na(ped$male)] #once eliminated NA lines but previous line necessary for loop survival
-  newdadline <- cbind(st2PedId,dadline)
-  alldads <- rbind(alldads,newdadline)
+  print(paste(i,st2Name,sep=" ")) #progressforerrorchecking
+  ped <- EBridaPedigree(crpId=5,PI=st2PedId) # EBridaPedigree does not fail gracefully so code will choke on empty PI
+  ped[is.na(ped)] <- c("NoDad") #prevents a completely empty pedigree killing the loop
+  dadcol <- ped$male #make new output column
+  newdadlines <- cbind(dadcol,st2Name) #add the Stage2 name
+  alldads <- rbind(alldads,newdadlines)
     }
 #clean up
-alldads <- alldads[-c(1),] #
+alldads <- alldads[-c(1),] #get rid of the empty top row from matrix formation
 #rm(i,st2PedId,ped,dadline,newdadline)
 #output
 #write.csv(alldads, file="alldads.csv")
