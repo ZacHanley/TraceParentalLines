@@ -26,8 +26,9 @@ rm(newdadlines,dadcol,n,st2Name)
 #output into Windows due to paranoia
 write.csv(alldads, file="alldads.csv")
 
-#remove NoDad entries
+#remove NoDad entries and the spurious column this creates
 malldads <- subset(alldads, maleAncestor!="NoDad")
+malldads <- malldads[,-c(1)]
 
 #load list of dads to check against
 
