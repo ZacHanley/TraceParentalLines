@@ -10,15 +10,15 @@ n <- c(1)
 for (i in n:nrow(St2codes_to_GroupCodes20150724)) {
   st2Name <- as.character(St2codes_to_GroupCodes20150724[i,1])
   st2PedId <- as.character(St2codes_to_GroupCodes20150724[i,2])
-  print(paste(i,st2Name,sep=" ")) #progressforerrorchecking
+  # print(paste(i,st2Name,sep=" ")) #progressforerrorchecking
   ped <- EBridaPedigree(crpId=5,PI=st2PedId) # EBridaPedigree does not fail gracefully so code will choke on empty PI
   ped[is.na(ped)] <- c("NoDad") #prevents a completely empty pedigree killing the loop
   dadcol <- ped$male #make new output column
   newdadlines <- cbind(dadcol,st2Name) #add the Stage2 name
   alldads <- rbind(alldads,newdadlines)
     }
-#clean up
+#tidy up
 alldads <- alldads[-c(1),] #get rid of the empty top row from matrix formation
-#rm(i,st2PedId,ped,dadline,newdadline)
+rm(i,st2PedId,ped,dadline,newdadline)
 #output
-#write.csv(alldads, file="alldads.csv")
+write.csv(alldads, file="alldads.csv")
