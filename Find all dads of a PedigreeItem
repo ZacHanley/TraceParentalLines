@@ -17,8 +17,12 @@ for (i in n:nrow(St2codes_to_GroupCodes20150724)) {
   newdadlines <- cbind(dadcol,st2Name) #add the Stage2 name
   alldads <- rbind(alldads,newdadlines)
     }
+
 #tidy up
-alldads <- alldads[-c(1),] #get rid of the empty top row from matrix formation
+alldads <- alldads[-c(1),]
 rm(i,st2PedId,ped,dadline,newdadline)
+rm(newdadlines,dadcol,n,st2Name)
+
 #output
 write.csv(alldads, file="alldads.csv")
+rm(alldads)
